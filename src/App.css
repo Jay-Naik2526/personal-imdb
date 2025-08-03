@@ -1,0 +1,102 @@
+:root {
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #b3b3b3;
+  --accent-color: #1db954;
+  --imdb-gold: #f5c518;
+  --danger-color: #e53e3e; /* NEW */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--primary-text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+}
+
+.loading-screen { display: flex; justify-content: center; align-items: center; height: 100vh; }
+.app-container { width: 100%; min-height: 100vh; }
+.main-background { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-size: cover; background-position: center; filter: blur(20px) brightness(0.5); transform: scale(1.2); transition: background-image 0.5s ease-in-out; z-index: -2; }
+.main-background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: radial-gradient(circle, rgba(18,18,18,0.4) 0%, rgba(18,18,18,1) 70%); z-index: -1; }
+.library-layout { display: flex; }
+.sidebar { width: 240px; height: 100vh; background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.1); padding: 2rem 1.5rem; box-sizing: border-box; position: fixed; top: 0; left: 0; overflow-y: auto; }
+.library-title { font-size: 1.5rem; margin-bottom: 1rem; }
+.add-movie-button { width: 100%; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; padding: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-bottom: 1rem; transition: background-color 0.2s; }
+.add-movie-button:hover { background-color: #1ed760; }
+.sidebar nav ul { list-style: none; padding: 0; margin: 0; }
+.sidebar nav button { width: 100%; background: none; border: none; color: var(--secondary-text-color); font-size: 1rem; text-align: left; padding: 0.75rem 0; cursor: pointer; transition: color 0.2s; position: relative; }
+.sidebar nav button:hover { color: var(--primary-text-color); }
+.sidebar nav button.active { color: var(--primary-text-color); font-weight: bold; }
+.sidebar nav button.active::before { content: ''; position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 4px; height: 24px; background-color: var(--accent-color); border-radius: 2px; }
+.movie-grid-container { margin-left: 240px; padding: 2rem; width: calc(100% - 240px); }
+.grid-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.grid-header h2 { margin: 0; font-size: 2rem; }
+.controls-container { display: flex; align-items: center; gap: 1rem; }
+.search-bar input, .sort-options select { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 10px 15px; border-radius: 20px; font-size: 1rem; transition: all 0.2s; }
+.search-bar input { width: 250px; }
+.sort-options select { -webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: .65em auto; padding-right: 2.5rem; }
+.search-bar input:focus, .sort-options select:focus { outline: none; background-color: rgba(255, 255, 255, 0.2); border-color: var(--accent-color); }
+.movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+.search-category-title { margin-top: 2rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 1.2rem; color: var(--secondary-text-color); }
+.search-category-title:first-child { margin-top: 0; }
+.movie-card { border-radius: 8px; overflow: hidden; cursor: pointer; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); transition: transform 0.2s ease; position: relative; }
+.movie-card:hover { transform: scale(1.05); }
+.movie-card img { width: 100%; display: block; aspect-ratio: 2 / 3; object-fit: cover; }
+.card-title-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); padding: 1.5rem 0.75rem 0.75rem; opacity: 0; transition: opacity 0.2s ease-in-out; }
+.movie-card:hover .card-title-overlay { opacity: 1; }
+.card-title-overlay h3 { color: white; font-size: 0.9rem; margin: 0; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background-color: var(--surface-color); padding: 2rem; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.modal-content h2 { margin-top: 0; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; color: var(--secondary-text-color); }
+.form-group input, .form-group select { width: 100%; padding: 10px; font-size: 1rem; background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 5px; box-sizing: border-box; }
+.modal-content button { background-color: var(--accent-color); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background-color 0.2s; }
+.modal-content button:disabled { background-color: #555; cursor: not-allowed; }
+.close-button { background-color: #444 !important; float: right; }
+.error-message { color: #ff4d4d; }
+.fetched-preview { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.fetched-preview img { width: 100px; height: 150px; object-fit: cover; border-radius: 5px; }
+.fetched-preview h3 { margin: 0 0 0.5rem 0; }
+.fetched-preview p { font-size: 0.9rem; color: var(--secondary-text-color); margin: 0; }
+.save-button { margin-top: 1rem; width: 100%; }
+.detail-view-container { width: 100%; height: 100vh; overflow: hidden; position: relative; }
+.detail-backdrop { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center 20%; filter: blur(8px); transform: scale(1.1); }
+.detail-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 5rem; height: 100%; box-sizing: border-box; }
+.detail-poster { width: 300px; height: 450px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
+.detail-poster img { width: 100%; height: 100%; display: block; }
+.detail-info { margin-left: 3rem; max-width: 600px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.detail-info h1 { font-size: 3rem; margin: 0; }
+.detail-meta { display: flex; align-items: center; gap: 1.5rem; margin: 0.5rem 0 1.5rem; color: var(--secondary-text-color); }
+.detail-meta .rating { font-weight: bold; color: var(--imdb-gold); }
+.detail-info .genre { font-style: italic; color: var(--secondary-text-color); }
+.detail-info .overview { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
+.crew p { margin: 0.5rem 0; }
+/* --- NEW: Button Group and Delete Button Styles --- */
+.button-group {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+.back-button, .delete-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0; /* Override previous margin */
+}
+.back-button:hover { background-color: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3); }
+.delete-button {
+  background-color: rgba(229, 62, 62, 0.2);
+  border-color: rgba(229, 62, 62, 0.4);
+}
+.delete-button:hover {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
