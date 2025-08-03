@@ -5,7 +5,7 @@
   --secondary-text-color: #b3b3b3;
   --accent-color: #1db954;
   --imdb-gold: #f5c518;
-  --danger-color: #e53e3e; /* NEW */
+  --danger-color: #e53e3e;
 }
 
 body {
@@ -21,7 +21,15 @@ body {
 .main-background { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-size: cover; background-position: center; filter: blur(20px) brightness(0.5); transform: scale(1.2); transition: background-image 0.5s ease-in-out; z-index: -2; }
 .main-background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: radial-gradient(circle, rgba(18,18,18,0.4) 0%, rgba(18,18,18,1) 70%); z-index: -1; }
 .library-layout { display: flex; }
-.sidebar { width: 240px; height: 100vh; background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.1); padding: 2rem 1.5rem; box-sizing: border-box; position: fixed; top: 0; left: 0; overflow-y: auto; }
+
+.sidebar {
+  width: 240px; height: 100vh; background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 1.5rem; box-sizing: border-box; position: fixed;
+  top: 0; left: 0; overflow-y: auto; z-index: 100;
+  transition: transform 0.3s ease-in-out; /* Added for smooth slide */
+}
+
 .library-title { font-size: 1.5rem; margin-bottom: 1rem; }
 .add-movie-button { width: 100%; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; padding: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-bottom: 1rem; transition: background-color 0.2s; }
 .add-movie-button:hover { background-color: #1ed760; }
@@ -30,7 +38,13 @@ body {
 .sidebar nav button:hover { color: var(--primary-text-color); }
 .sidebar nav button.active { color: var(--primary-text-color); font-weight: bold; }
 .sidebar nav button.active::before { content: ''; position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 4px; height: 24px; background-color: var(--accent-color); border-radius: 2px; }
-.movie-grid-container { margin-left: 240px; padding: 2rem; width: calc(100% - 240px); }
+
+.movie-grid-container {
+  margin-left: 240px;
+  padding: 2rem;
+  width: calc(100% - 240px);
+}
+
 .grid-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
 .grid-header h2 { margin: 0; font-size: 2rem; }
 .controls-container { display: flex; align-items: center; gap: 1rem; }
@@ -47,6 +61,98 @@ body {
 .card-title-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); padding: 1.5rem 0.75rem 0.75rem; opacity: 0; transition: opacity 0.2s ease-in-out; }
 .movie-card:hover .card-title-overlay { opacity: 1; }
 .card-title-overlay h3 { color: white; font-size: 0.9rem; margin: 0; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+
+/* --- NEW: Mobile Menu Button --- */
+.mobile-menu-button { display: none; } /* Hidden on desktop */
+.mobile-menu-overlay { display: none; } /* Hidden on desktop */
+
+/* --- ALL RESPONSIVE STYLES --- */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* Hidden by default on mobile */
+  }
+  .sidebar.is-open {
+    transform: translateX(0); /* Slides in when open */
+  }
+  .mobile-menu-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+  }
+  .movie-grid-container {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  .grid-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .grid-header h2 {
+    font-size: 1.5rem;
+  }
+  .controls-container {
+    width: 100%;
+  }
+  .search-bar {
+    flex-grow: 1;
+  }
+  .search-bar input {
+    width: 100%;
+  }
+  .mobile-menu-button {
+    display: block;
+    background: none;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    position: absolute;
+    top: 2.2rem;
+    left: 1rem;
+    z-index: 50;
+  }
+  .grid-header h2 {
+    padding-left: 40px; /* Make space for hamburger */
+  }
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+  .detail-content {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    overflow-y: auto;
+  }
+  .detail-poster {
+    width: 60%;
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 2rem;
+  }
+  .detail-info {
+    margin-left: 0;
+  }
+  .detail-info h1 {
+    font-size: 2rem;
+  }
+  .button-group {
+    justify-content: center;
+  }
+}
+
+/* Modal Styles */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .modal-content { background-color: var(--surface-color); padding: 2rem; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .modal-content h2 { margin-top: 0; }
@@ -62,6 +168,8 @@ body {
 .fetched-preview h3 { margin: 0 0 0.5rem 0; }
 .fetched-preview p { font-size: 0.9rem; color: var(--secondary-text-color); margin: 0; }
 .save-button { margin-top: 1rem; width: 100%; }
+
+/* Detail View Styles */
 .detail-view-container { width: 100%; height: 100vh; overflow: hidden; position: relative; }
 .detail-backdrop { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center 20%; filter: blur(8px); transform: scale(1.1); }
 .detail-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 5rem; height: 100%; box-sizing: border-box; }
@@ -74,29 +182,8 @@ body {
 .detail-info .genre { font-style: italic; color: var(--secondary-text-color); }
 .detail-info .overview { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
 .crew p { margin: 0.5rem 0; }
-/* --- NEW: Button Group and Delete Button Styles --- */
-.button-group {
-  margin-top: 2rem;
-  display: flex;
-  gap: 1rem;
-}
-.back-button, .delete-button {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 12px 24px;
-  font-size: 1rem;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 0; /* Override previous margin */
-}
+.button-group { margin-top: 2rem; display: flex; gap: 1rem; }
+.back-button, .delete-button { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; font-size: 1rem; border-radius: 50px; cursor: pointer; transition: all 0.2s; margin-top: 0; }
 .back-button:hover { background-color: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3); }
-.delete-button {
-  background-color: rgba(229, 62, 62, 0.2);
-  border-color: rgba(229, 62, 62, 0.4);
-}
-.delete-button:hover {
-  background-color: var(--danger-color);
-  border-color: var(--danger-color);
-}
+.delete-button { background-color: rgba(229, 62, 62, 0.2); border-color: rgba(229, 62, 62, 0.4); }
+.delete-button:hover { background-color: var(--danger-color); border-color: var(--danger-color); }

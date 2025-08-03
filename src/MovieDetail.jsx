@@ -1,10 +1,9 @@
 import { motion as motion3 } from 'framer-motion';
 
-function MovieDetail({ movie, onGoBack, onDeleteMovie }) { // Accept onDeleteMovie prop
+function MovieDetail({ movie, onGoBack, onDeleteMovie }) {
   const backdropStyle = { backgroundImage: `linear-gradient(to top, #121212 10%, rgba(18, 18, 18, 0.7)), url(${movie.poster_path})` };
 
   const handleDelete = () => {
-    // Show a confirmation dialog before deleting
     if (window.confirm(`Are you sure you want to delete "${movie.title}"?`)) {
       onDeleteMovie(movie.id);
     }
@@ -25,7 +24,6 @@ function MovieDetail({ movie, onGoBack, onDeleteMovie }) { // Accept onDeleteMov
           <div className="crew"><p><strong>Director:</strong> {movie.director}</p><p><strong>Starring:</strong> {movie.actors}</p></div>
           <div className="button-group">
             <button className="back-button" onClick={onGoBack}>← Back to Library</button>
-            {/* --- NEW: Delete Button --- */}
             <button className="delete-button" onClick={handleDelete}>Delete Movie</button>
           </div>
         </div>
