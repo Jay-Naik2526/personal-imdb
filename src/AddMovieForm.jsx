@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 // IMPORTANT: Add your OMDb API key here.
 // For a real application, this should be in a .env file, but for this personal project, this is fine.
-const OMDB_API_KEY = '7526160a';
+const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
 function AddMovieForm({ categories, onClose, onAddMovie }) {
   const [title, setTitle] = useState('');
