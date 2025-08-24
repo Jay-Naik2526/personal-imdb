@@ -175,7 +175,17 @@ body {
 .detail-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 5rem; height: 100%; box-sizing: border-box; }
 .detail-poster { width: 300px; height: 450px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
 .detail-poster img { width: 100%; height: 100%; display: block; }
-.detail-info { margin-left: 3rem; max-width: 600px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+/* --- THIS IS THE MODIFIED SECTION --- */
+.detail-info {
+  margin-left: 3rem;
+  max-width: 600px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  max-height: calc(100vh - 10rem); /* Sets a max height based on the viewport */
+  overflow-y: auto;                  /* Adds a scrollbar only when needed */
+  padding-right: 1rem;               /* Adds space so the scrollbar doesn't overlap text */
+}
+
 .detail-info h1 { font-size: 3rem; margin: 0; }
 .detail-meta { display: flex; align-items: center; gap: 1.5rem; margin: 0.5rem 0 1.5rem; color: var(--secondary-text-color); }
 .detail-meta .rating { font-weight: bold; color: var(--imdb-gold); }
