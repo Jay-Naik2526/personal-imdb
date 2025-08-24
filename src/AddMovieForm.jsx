@@ -8,7 +8,10 @@ const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 function AddMovieForm({ categories, onClose, onAddMovie }) {
   const [title, setTitle] = useState('');
   const [year, setYear] = useState('');
+  // Set the default category, or '' if none exist
   const [category, setCategory] = useState(categories[0] || '');
+  // NEW: State to hold the name of a new category
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [fetchedData, setFetchedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -48,12 +51,24 @@ function AddMovieForm({ categories, onClose, onAddMovie }) {
     setIsLoading(false);
   };
 
+  // UPDATED: Logic to handle saving with a new or existing category
   const handleSaveMovie = () => {
     if (!fetchedData) {
       setError('Please fetch movie details before saving.');
       return;
     }
-    onAddMovie({ ...fetchedData, category });
+
+    let finalCategory = category;
+    // Check if the user is creating a new category
+    if (category === '--new--') {
+      if (!newCategoryName.trim()) {
+        setError('Please enter a name for the new category.');
+        return;
+      }
+      finalCategory = newCategoryName.trim();
+    }
+
+    onAddMovie({ ...fetchedData, category: finalCategory });
     onClose();
   };
 
@@ -91,12 +106,29 @@ function AddMovieForm({ categories, onClose, onAddMovie }) {
             <div>
               <h3>{fetchedData.title} ({fetchedData.year})</h3>
               <p>{fetchedData.overview.substring(0, 100)}...</p>
+              {/* --- UPDATED CATEGORY SELECTION --- */}
               <div className="form-group">
                 <label>Add to Category</label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)}>
                   {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  {/* Special option to trigger the new category input */}
+                  <option value="--new--">-- Add New Category --</option>
                 </select>
               </div>
+
+              {/* Conditionally rendered input for the new category name */}
+              {category === '--new--' && (
+                <div className="form-group">
+                  <label>New Category Name</label>
+                  <input
+                    type="text"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder="e.g., Sci-Fi Classics"
+                  />
+                </div>
+              )}
+              {/* --- END OF UPDATES --- */}
               <button className="save-button" onClick={handleSaveMovie}>Save Movie</button>
             </div>
           </div>
